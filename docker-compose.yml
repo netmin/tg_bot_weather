@@ -1,0 +1,12 @@
+version: '3.7'
+
+services:
+  weather-bot:
+    build:
+      context: .
+    volumes:
+      - ./app:/app
+    env_file:
+      - .env
+    ports:
+    - 80:80
