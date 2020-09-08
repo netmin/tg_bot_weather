@@ -156,3 +156,6 @@ Sessionx.vim
 tags
 # Persistent undo
 [._]*.un~
+
+# city list
+app/data/city.list.json

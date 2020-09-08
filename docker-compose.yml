@@ -10,3 +10,13 @@ services:
       - .env
     ports:
     - 80:80
+    restart: always
+
+  redis:
+    image: redis
+    volumes:
+      - weather-redis-data:/data
+    restart: always
+
+volumes:
+  weather-redis-data:

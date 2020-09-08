@@ -1,22 +1,30 @@
 import logging
 
-from aiogram import Bot, Dispatcher, executor, types
-
-API_TOKEN = ''
+import aiohttp
+from aiogram import types
 
 # Configure logging
+from loader import dp
+
 logging.basicConfig(level=logging.INFO)
 
-# Initialize bot and dispatcher
-bot = Bot(token=API_TOKEN)
-dp = Dispatcher(bot)
 
+async def on_startup(db):
+    import filters
+    import middlewares
+    import handlers
+    filters.setup(db)
+    middlewares.setup(db)
+    handlers.user.setup(db)
 
-@dp.message_handler()
-async def echo(message: types.Message):
-    await message.answer(message.text)
+    from utils.notify_admins import on_startup_notify
+    from utils.set_bot_commands import set_default_commands
+    await on_startup_notify(db)
+    await set_default_commands(db)
 
 
 if __name__ == '__main__':
-    executor.start_polling(dp, skip_updates=True)
+    from aiogram import executor
+    from handlers import user
+    executor.start_polling(dp, on_startup=on_startup)
 
